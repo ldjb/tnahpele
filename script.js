@@ -1,5 +1,6 @@
 var ctx;
-var order = [0,0,1,2,1,2,1,3];
+var order = [];
+var stepIndex = 0;
 
 function drawSegment(colour, lit) {
 	var blue = ["#00c", "#ccf", 0, Math.PI/2];
@@ -104,19 +105,41 @@ $("#p").on("click", function(e) {
 	var pos = $(this).position();
 	var data = ctx.getImageData(e.pageX-pos.left, e.pageY-pos.top, 1, 1).data;
 	data = Array.prototype.slice.call(data, 0, 3);
-	var select;
+	var select = null;
 	switch(data.toString()) {
-		case "0,0,255":
-			select = "b";
+		case "0,0,204":
+			select = 0;
 			break;
-		case "255,255,0":
-			select = "y";
+		case "204,204,0":
+			select = 1;
 			break;
-		case "0,255,0":
-			select = "g";
+		case "0,204,0":
+			select = 2;
 			break;
-		case "255,0,0":
-			select = "r";
+		case "204,0,0":
+			select = 3;
 			break;
+	}
+	if (select != null) {
+		drawSegment(select, true);
+		drawTop();
+		$("#sfx-"+select)[0].play();
+		setTimeout(function() {
+			init();
+		}, 500);
+		if (select == order[order.length - 1 - stepIndex]) {
+			if (stepIndex == order.length - 1) {
+				order.push(Math.floor(Math.random() * 4));
+				stepIndex = 0;
+				setTimeout(say, 1100);
+			}
+			else {
+				stepIndex++;
+			}
+		}
+		else {
+			alert("game over");
+			window.location = window.location;
+		}
 	}
 });
