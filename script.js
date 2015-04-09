@@ -1,6 +1,7 @@
 var ctx;
 var order = [];
 var stepIndex = 0;
+var round = 0;
 
 function drawSegment(colour, lit) {
 	var blue = ["#00c", "#ccf", 0, Math.PI/2];
@@ -50,6 +51,11 @@ function drawTop() {
 	$(title).on("load", function() {
 		ctx.drawImage(title, 274, 230);
 	});
+	//score
+	ctx.fillStyle = "#fff";
+	ctx.textAlign = "center";
+	ctx.font = "12px Verdana";
+	ctx.fillText(round, 320, 270);
 }
 
 function init() {
@@ -131,6 +137,7 @@ $("#p").on("click", function(e) {
 			if (stepIndex == order.length - 1) {
 				order.push(Math.floor(Math.random() * 4));
 				stepIndex = 0;
+				round++;
 				setTimeout(say, 1100);
 			}
 			else {
@@ -138,8 +145,11 @@ $("#p").on("click", function(e) {
 			}
 		}
 		else {
-			alert("game over");
-			window.location = window.location;
+			round = "Game Over";
+			init();
+			setTimeout(function() {
+				window.location = window.location;
+			}, 1000);
 		}
 	}
 });
